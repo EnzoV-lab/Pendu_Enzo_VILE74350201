@@ -64,3 +64,16 @@ def pendu():
 
     if nombre_chance == 0:
         print(f"Tu as perdu, le mot etait : {solution} ")
+    return rejouer()
+
+def rejouer():
+    reponse = input("Rejouer ? (yes/no) : ")
+    if reponse == "no":
+        print ("Au revoir")
+    elif reponse == "yes":
+        return pendu()
+    else:
+        print("Vous devez écrire soit yes soit no")
+        return rejouer()
+
+pendu()
