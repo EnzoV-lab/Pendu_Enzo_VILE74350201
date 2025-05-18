@@ -1,8 +1,17 @@
 import random
+def initial ():
+    #Proposition au joueur de jouer avec son propre fichier
+    proposition = input("Propose un nom de ficher si tu veux utiliser le tiens sinon clique sur 'Entrer' pour utiliser le fichier par defaut :  ")
+    if proposition == "":
+        fichier = "Motspendu.txt"
+    else :
+        fichier = proposition
+    pendu(fichier)
 
-# Fonction qui lit les mots du fichier et retourne un mot aléatoire sans accent
-def choisirmot():
-    with open("Motspendu.txt", "r") as fichier:  # Ouvre le fichier contenant les mots
+#création de la fonction
+def choisir_mot(fichier):
+
+    with open(fichier, "r") as fichier:  # Ouvre le fichier contenant les mots
         lignes = fichier.readlines()  # Lit toutes les lignes
 
     mots_sans_accents = []  # Liste pour stocker les mots sans accents
@@ -30,11 +39,11 @@ def choisirmot():
     return random.choice(mots_sans_accents)  # Retourne un mot aléatoire
 
 # Fonction principale du jeu du pendu
-def pendu():
+def pendu(fichier):
     print(
         "Bienvenue au jeu du pendu, l'objectif est de trouver le mot caché derrière les '_' vous avez doit à 6 fautes \nA vous de JOUER ! ")
 
-    solution = choisirmot()  # Mot à deviner, choisi aléatoirement
+    solution = choisir_mot(fichier)  # Mot à deviner, choisi aléatoirement
 
     mot_a_trouver = "_" * len(solution)  # Mot affiché avec des "_"
     mot_actualiser = "_" * len(solution)  # Copie pour suivre les changements
@@ -57,14 +66,14 @@ def pendu():
 
         elif mot_a_trouver == mot_actualiser:        # Si la lettre ne change rien => mauvaise lettre
             nombre_chance -= 1
-            print(f"il vous reste {nombre_chance} chances")
+            print(f"La lettre {lettre} n'est pas dans le mot... \nIl te reste {nombre_chance} chances")
 
         elif mot_a_trouver == solution:        # Si toutes les lettres ont été devinées
             print(f"Tu as gagnée le mot était bien : {solution} ")
             break
 
         else:
-            print("Continue comme ça")            # Si la lettre est correcte mais le mot n'est pas encore complet
+            print(f"La lettre {lettre} est bien dans le mot, continue comme ça")            # Si la lettre est correcte mais le mot n'est pas encore complet
             print(mot_a_trouver)
 
         mot_actualiser = mot_a_trouver  # Met à jour l'état actuel du mot
@@ -78,17 +87,17 @@ def pendu():
     if nombre_chance == 0:
         print(f"Tu as perdu, le mot etait : {solution} ")
 
-    return rejouer()  # Propose de rejouer après chaque partie
+    return rejouer(fichier)  # Propose de rejouer après chaque partie
 
 # Fonction qui propose de rejouer
-def rejouer():
+def rejouer(fichier):
     reponse = input("Rejouer ? (yes/no) : ")
     if reponse == "no":
         return print ("Au revoir")
     elif reponse == "yes":
-        return pendu()  # Relance une nouvelle partie
+        return pendu(fichier)  # Relance une nouvelle partie
     else:
         print("Vous devez écrire soit yes soit no")        # Si la réponse n'est ni yes ni no
-        return rejouer()  # Redemande une réponse valide
+        return rejouer(fichier)  # Redemande une réponse valide
 
-pendu()
+initial()
